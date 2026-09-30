@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Pranav K — AI Engineer and developer portfolio." />
+  <title>Pranav K — AI Engineer / Developer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.14/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#050505; --panel:#0b0b0b; --panel2:#101010; --text:#f4f4ef;
+      --muted:#8e8e89; --line:rgba(255,255,255,.11); --acid:#d8ff3e;
+      --cyan:#75e8ff; --max:1240px; --ease:cubic-bezier(.16,1,.3,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:auto;background:var(--bg)}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    ::selection{background:var(--acid);color:#000}
+    .noise{position:fixed;inset:0;pointer-events:none;z-index:1000;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
+    .cursor{position:fixed;width:18px;height:18px;border:1px solid rgba(255,255,255,.8);border-radius:50%;pointer-events:none;z-index:2000;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .25s,height .25s,background .25s}
+    .cursor.big{width:70px;height:70px;background:#fff;border-color:#fff}
+    .container{width:min(var(--max),calc(100% - 48px));margin:auto}
+    .mono{font-family:"DM Mono",monospace}
+    .eyebrow{font:500 11px "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:999px;padding:9px 13px;color:#bcbcb6;font:400 11px "DM Mono",monospace}
+    .dot{width:7px;height:7px;background:var(--acid);border-radius:50%;box-shadow:0 0 18px var(--acid)}
+    .nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);width:min(1180px,calc(100% - 30px));height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 18px;border:1px solid rgba(255,255,255,.1);background:rgba(8,8,8,.58);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:18px;z-index:900}
+    .brand{font-weight:800;letter-spacing:-.06em;font-size:19px}
+    .brand span{color:var(--acid)}
+    .navlinks{display:flex;gap:26px;color:#a9a9a3;font:400 11px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.08em}
+    .navlinks a{transition:.3s}.navlinks a:hover{color:#fff}
+    .nav-cta{background:#f4f4ef;color:#050505;border:0;border-radius:12px;padding:10px 14px;font-size:11px;font-weight:700;cursor:pointer}
+    .hero{min-height:100svh;position:relative;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.8}
+    .hero-glow{position:absolute;width:70vw;height:70vw;right:-25vw;top:-25vw;background:radial-gradient(circle,rgba(216,255,62,.12),transparent 62%);filter:blur(10px)}
+    .hero-content{position:relative;z-index:2;padding-top:70px}
+    .hero-kicker{margin-bottom:24px}
+    .hero h1{font-size:clamp(64px,10.5vw,154px);line-height:.82;letter-spacing:-.085em;margin:0;max-width:1050px;font-weight:800}
+    .hero h1 .outline{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7)}
+    .hero h1 .acid{color:var(--acid)}
+    .hero-bottom{margin-top:55px;display:flex;justify-content:space-between;align-items:end;gap:30px}
+    .hero-copy{max-width:500px;color:#9d9d97;line-height:1.7;font-size:14px}
+    .hero-meta{text-align:right;font:400 10px "DM Mono",monospace;color:#777}
+    .scroll-mark{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font:400 9px "DM Mono",monospace;color:#666;letter-spacing:.15em;text-transform:uppercase}
+    .scroll-mark:after{content:"";display:block;width:1px;height:48px;background:linear-gradient(#666,transparent);margin:9px auto 0}
+    section{position:relative;padding:150px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:start;gap:30px;margin-bottom:65px}
+    .section-title{font-size:clamp(40px,6vw,82px);line-height:.9;letter-spacing:-.07em;margin:0;font-weight:700}
+    .section-note{max-width:300px;color:#777;line-height:1.7;font-size:12px}
+    .marquee{border-block:1px solid var(--line);overflow:hidden;padding:17px 0;color:#777;font:400 11px "DM Mono",monospace;white-space:nowrap}
+    .marquee-track{display:inline-flex;gap:50px}
+    .marquee b{color:var(--acid);font-weight:400}
+    .projects{border-bottom:1px solid var(--line)}
+    .project{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:650px;border-top:1px solid var(--line);overflow:hidden}
+    .project-info{padding:70px 45px 70px 0;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:2}
+    .project-number{font:400 11px "DM Mono",monospace;color:#666}
+    .project h3{font-size:clamp(48px,7vw,94px);letter-spacing:-.075em;line-height:.86;margin:20px 0 24px}
+    .project p{max-width:470px;color:#888;line-height:1.7;font-size:14px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}
+    .tag{border:1px solid var(--line);border-radius:999px;padding:8px 10px;font:400 10px "DM Mono",monospace;color:#8d8d87}
+    .project-link{display:inline-flex;align-items:center;gap:14px;margin-top:40px;font:500 11px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.08em}
+    .project-link i{width:34px;height:34px;border:1px solid #444;border-radius:50%;display:grid;place-items:center;font-style:normal;transition:.4s}
+    .project-link:hover i{background:var(--acid);color:#000;border-color:var(--acid);transform:rotate(45deg)}
+    .project-art{position:relative;min-height:520px;background:#090909;overflow:hidden}
+    .art-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:55px 55px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+    .art-noir{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(216,255,62,.15),transparent 18%),radial-gradient(circle at 70% 65%,rgba(216,255,62,.08),transparent 34%)}
+    .noir-word{position:absolute;left:8%;top:50%;transform:translateY(-50%);font-size:clamp(80px,13vw,180px);font-weight:800;letter-spacing:-.1em;color:#f2f2ed;line-height:.7}
+    .noir-word span{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.28)}
+    .art-career{position:absolute;inset:0;background:radial-gradient(circle at 55% 48%,rgba(117,232,255,.13),transparent 25%),linear-gradient(135deg,#0a0a0a,#111)}
+    .orbit{position:absolute;width:360px;height:360px;border:1px solid rgba(117,232,255,.45);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%) rotate(25deg);box-shadow:0 0 80px rgba(117,232,255,.07)}
+    .orbit:before,.orbit:after{content:"";position:absolute;inset:30px;border:1px solid rgba(117,232,255,.2);border-radius:50%;transform:rotate(65deg)}
+    .orbit:after{inset:75px;transform:rotate(-35deg)}
+    .orbit-core{position:absolute;width:80px;height:80px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#fff,#75e8ff 18%,#0b2025 58%,#020303);box-shadow:0 0 70px rgba(117,232,255,.3)}
+    .about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:80px}
+    .about-big{font-size:clamp(30px,4.4vw,60px);line-height:1.02;letter-spacing:-.055em;margin:0}
+    .about-copy{color:#888;line-height:1.8;font-size:14px;max-width:620px}
+    .skills{display:flex;flex-wrap:wrap;gap:10px;margin-top:35px}
+    .skill{padding:12px 14px;border:1px solid var(--line);border-radius:12px;color:#aaa;font:400 11px "DM Mono",monospace}
+    .contact{min-height:85vh;display:flex;align-items:center;border-top:1px solid var(--line)}
+    .contact-title{font-size:clamp(62px,11vw,160px);letter-spacing:-.09em;line-height:.8;margin:25px 0 45px}
+    .contact-title span{color:var(--acid)}
+    .contact-row{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:22px}
+    .contact-row a{font:400 12px "DM Mono",monospace;color:#aaa}
+    .contact-row a:hover{color:#fff}
+    footer{border-top:1px solid var(--line);padding:28px 0 40px;color:#666;font:400 10px "DM Mono",monospace;display:flex;justify-content:space-between}
+    .reveal{opacity:0;transform:translateY(40px)}
+    .magnetic{transition:transform .25s var(--ease)}
+    @media(max-width:800px){
+      .container{width:min(100% - 28px,var(--max))}
+      .nav{top:10px;width:calc(100% - 20px);height:54px}
+      .navlinks{display:none}
+      .hero h1{font-size:clamp(58px,18vw,105px)}
+      .hero-bottom{display:block;margin-top:40px}
+      .hero-meta{text-align:left;margin-top:25px}
+      section{padding:95px 0}
+      .section-head{display:block;margin-bottom:45px}
+      .section-note{margin-top:22px}
+      .project{grid-template-columns:1fr;min-height:auto}
+      .project-info{padding:55px 0}
+      .project-art{min-height:390px}
+      .about-grid{grid-template-columns:1fr;gap:40px}
+      .contact{min-height:70vh}
+      .contact-row{display:block}
+      .contact-row a{display:block;margin-top:14px}
+      footer{display:block}
+      footer span{display:block;margin-top:10px}
+      .cursor{display:none}
+    }
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none}
+      #hero-canvas{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="cursor"></div>
+
+  <nav class="nav">
+    <a class="brand magnetic" href="#top">PK<span>.</span></a>
+    <div class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta magnetic" href="#contact">Let's talk ↗</a>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-glow"></div>
+      <div class="container hero-content">
+        <div class="pill hero-kicker reveal"><span class="dot"></span> AI Engineer · Developer · Builder</div>
+        <h1 class="reveal">BUILDING<br><span class="outline">DIGITAL</span><br><span class="acid">FUTURES.</span></h1>
+        <div class="hero-bottom reveal">
+          <p class="hero-copy">I design and build intelligent, polished digital products — from AI-powered applications to immersive web experiences.</p>
+          <div class="hero-meta">KOCHI, INDIA<br>AVAILABLE FOR OPPORTUNITIES<br>2026 / 001</div>
+        </div>
+      </div>
+      <div class="scroll-mark">Scroll to explore</div>
+    </section>
+
+    <div class="marquee">
+      <div class="marquee-track" id="marquee">
+        <span>AI ENGINEERING</span><b>✦</b><span>FULL-STACK DEVELOPMENT</span><b>✦</b><span>PRODUCT DESIGN</span><b>✦</b><span>CREATIVE TECHNOLOGY</span><b>✦</b>
+        <span>AI ENGINEERING</span><b>✦</b><span>FULL-STACK DEVELOPMENT</span><b>✦</b><span>PRODUCT DESIGN</span><b>✦</b>
+      </div>
+    </div>
+
+    <section class="projects" id="work">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2 class="section-title">Selected<br>work.</h2>
+          <p class="section-note">Two current projects built from the ground up. One focused on practical career workflows. One focused on visual product experience.</p>
+        </div>
+
+        <article class="project reveal">
+          <div class="project-info">
+            <div>
+              <div class="project-number">01 / FULL-STACK PRODUCT</div>
+              <h3>Career<br>Track.</h3>
+              <p>A full-stack job application tracker with authentication, MongoDB persistence, analytics, interview scheduling, follow-ups, status history, activity timelines and a polished SaaS dashboard.</p>
+              <div class="tags">
+                <span class="tag">REACT</span><span class="tag">NODE.JS</span><span class="tag">EXPRESS</span>
+                <span class="tag">MONGODB</span><span class="tag">JWT</span><span class="tag">REST API</span>
+              </div>
+            </div>
+            <a class="project-link magnetic" href="https://github.com/pranavk3212/CareerTrack" target="_blank" rel="noopener">View on GitHub <i>↗</i></a>
+          </div>
+          <div class="project-art">
+            <div class="art-grid"></div><div class="art-career"></div>
+            <div class="orbit"></div><div class="orbit-core"></div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-info">
+            <div>
+              <div class="project-number">02 / CREATIVE WEB</div>
+              <h3>NOIR<span style="color:var(--acid)">.</span></h3>
+              <p>A futuristic minimalist fashion storefront with cinematic motion, smooth scrolling, product discovery, cart interactions and a restrained editorial visual system.</p>
+              <div class="tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JAVASCRIPT</span>
+                <span class="tag">GSAP</span><span class="tag">LENIS</span><span class="tag">THREE.JS</span>
+              </div>
+            </div>
+            <a class="project-link magnetic" href="https://github.com/pranavk3212/NOIR" target="_blank" rel="noopener">View on GitHub <i>↗</i></a>
+          </div>
+          <div class="project-art">
+            <div class="art-grid"></div><div class="art-noir"></div>
+            <div class="noir-word">N<span>O</span>IR</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">02 / About</div>
+        </div>
+        <div class="about-grid">
+          <p class="about-big reveal">Technology should feel <span style="color:var(--acid)">useful</span>, human and unforgettable.</p>
+          <div class="reveal">
+            <p class="about-copy">I'm Pranav K, an AI Engineer and developer focused on turning ideas into useful software. My work spans AI engineering, full-stack development, modern web interfaces and data-driven applications.</p>
+            <p class="about-copy">I enjoy the space where engineering meets product design — clean systems underneath, thoughtful experiences on top.</p>
+            <div class="skills">
+              <span class="skill">Python</span><span class="skill">Java</span><span class="skill">C / C++</span>
+              <span class="skill">React</span><span class="skill">Node.js</span><span class="skill">SQL</span>
+              <span class="skill">MongoDB</span><span class="skill">Azure</span><span class="skill">AI / ML</span>
+              <span class="skill">RAG</span><span class="skill">Power BI</span><span class="skill">Git / GitHub</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="eyebrow reveal">03 / Contact</div>
+        <h2 class="contact-title reveal">LET'S<br><span>BUILD.</span></h2>
+        <div class="contact-row reveal">
+          <span class="eyebrow">Open to opportunities & collaborations</span>
+          <a href="https://www.linkedin.com/in/pranav-k-2454451ba" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://github.com/pranavk3212" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="mailto:your-email@example.com">your-email@example.com ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <span>PRANAV K © 2026</span>
+    <span>BUILT WITH CODE + CURIOSITY</span>
+  </footer>
+
+  <script>
+    (() => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Smooth scrolling
+      if (!reduce && window.Lenis) {
+        const lenis = new Lenis({ duration: 1.15, smoothWheel: true, touchMultiplier: 1.1 });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+      }
+
+      if (window.gsap) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.fromTo(".hero .reveal",
+          { y: 70, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.2, stagger: .12, ease: "power4.out", delay: .15 }
+        );
+
+        if (!reduce) {
+          gsap.utils.toArray(".reveal").forEach((el, i) => {
+            if (el.closest(".hero")) return;
+            gsap.fromTo(el,
+              { y: 55, opacity: 0 },
+              { y: 0, opacity: 1, duration: 1, ease: "power4.out",
+                scrollTrigger: { trigger: el, start: "top 88%", once: true } }
+            );
+          });
+
+          gsap.to("#marquee", {
+            xPercent: -20, ease: "none",
+            scrollTrigger: { trigger: ".marquee", start: "top bottom", end: "bottom top", scrub: 1 }
+          });
+
+          gsap.to(".project-art", {
+            yPercent: -5, ease: "none",
+            scrollTrigger: { trigger: ".projects", start: "top bottom", end: "bottom top", scrub: 1 }
+          });
+        }
+      }
+
+      // Magnetic buttons
+      if (!reduce) {
+        document.querySelectorAll(".magnetic").forEach(el => {
+          el.addEventListener("mousemove", e => {
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - (r.left + r.width / 2)) * .16;
+            const y = (e.clientY - (r.top + r.height / 2)) * .16;
+            el.style.transform = `translate(${x}px,${y}px)`;
+          });
+          el.addEventListener("mouseleave", () => el.style.transform = "");
+        });
+
+        const cursor = document.querySelector(".cursor");
+        window.addEventListener("mousemove", e => {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+        });
+        document.querySelectorAll("a,button,.project-art").forEach(el => {
+          el.addEventListener("mouseenter", () => cursor.classList.add("big"));
+          el.addEventListener("mouseleave", () => cursor.classList.remove("big"));
+        });
+      }
+
+      // Three.js hero field
+      if (!reduce && window.THREE) {
+        const canvas = document.getElementById("hero-canvas");
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .1, 100);
+        camera.position.z = 7;
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+        renderer.setSize(innerWidth, innerHeight);
+
+        const group = new THREE.Group();
+        scene.add(group);
+
+        const geo = new THREE.IcosahedronGeometry(1.55, 2);
+        const mat = new THREE.MeshBasicMaterial({ color: 0xd8ff3e, wireframe: true, transparent: true, opacity: .12 });
+        const mesh = new THREE.Mesh(geo, mat);
+        group.add(mesh);
+
+        const ringGeo = new THREE.TorusGeometry(2.15, .008, 8, 180);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x75e8ff, transparent: true, opacity: .35 });
+        const ring1 = new THREE.Mesh(ringGeo, ringMat);
+        ring1.rotation.x = .9;
+        ring1.rotation.y = .3;
+        group.add(ring1);
+
+        const ring2 = ring1.clone();
+        ring2.rotation.x = .2;
+        ring2.rotation.y = 1.1;
+        ring2.scale.setScalar(1.2);
+        group.add(ring2);
+
+        const points = new THREE.BufferGeometry();
+        const arr = new Float32Array(700 * 3);
+        for(let i=0;i<arr.length;i++) arr[i] = (Math.random() - .5) * 12;
+        points.setAttribute("position", new THREE.BufferAttribute(arr,3));
+        const pmat = new THREE.PointsMaterial({ color:0xffffff, size:.012, transparent:true, opacity:.42 });
+        scene.add(new THREE.Points(points,pmat));
+
+        let mx=0,my=0;
+        addEventListener("pointermove", e => {
+          mx=(e.clientX/innerWidth-.5)*.5;
+          my=(e.clientY/innerHeight-.5)*.35;
+        });
+
+        function animate(t){
+          group.rotation.y += .0018;
+          group.rotation.x += .0007;
+          group.rotation.y += (mx - group.rotation.y * .02) * .008;
+          group.rotation.x += (-my - group.rotation.x * .02) * .008;
+          mesh.rotation.z = t * .00015;
+          ring1.rotation.z = t * .00012;
+          ring2.rotation.z = -t * .00009;
+          renderer.render(scene,camera);
+          requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
+
+        addEventListener("resize",()=>{
+          camera.aspect=innerWidth/innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(innerWidth,innerHeight);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
