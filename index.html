@@ -79,6 +79,12 @@
     .noir-word{position:absolute;left:8%;top:50%;transform:translateY(-50%);font-size:clamp(80px,13vw,180px);font-weight:800;letter-spacing:-.1em;color:#f2f2ed;line-height:.7}
     .noir-word span{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.28)}
     .art-career{position:absolute;inset:0;background:radial-gradient(circle at 55% 48%,rgba(117,232,255,.13),transparent 25%),linear-gradient(135deg,#0a0a0a,#111)}
+    .art-rag{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;background:radial-gradient(circle at 50% 45%,rgba(216,255,62,.1),transparent 38%),linear-gradient(135deg,#080908,#10110c)}
+    .rag-node{position:relative;z-index:1;width:min(250px,70%);padding:14px 16px;border:1px solid rgba(216,255,62,.38);background:rgba(5,5,5,.86);color:#e9e9df;font:500 11px "DM Mono",monospace;letter-spacing:.08em;text-align:center;box-shadow:0 0 35px rgba(216,255,62,.04)}
+    .rag-node span{display:block;margin-top:7px;color:#888;font-size:9px;letter-spacing:.12em}
+    .rag-line{width:1px;height:17px;background:linear-gradient(transparent,var(--acid));margin:-17px 0;opacity:.8}
+    .rag-cite{margin-top:10px;color:var(--acid);font:400 9px "DM Mono",monospace;letter-spacing:.13em;text-align:center}
+
     .orbit{position:absolute;width:360px;height:360px;border:1px solid rgba(117,232,255,.45);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%) rotate(25deg);box-shadow:0 0 80px rgba(117,232,255,.07)}
     .orbit:before,.orbit:after{content:"";position:absolute;inset:30px;border:1px solid rgba(117,232,255,.2);border-radius:50%;transform:rotate(65deg)}
     .orbit:after{inset:75px;transform:rotate(-35deg)}
@@ -165,7 +171,7 @@
       <div class="container">
         <div class="section-head reveal">
           <h2 class="section-title">Selected<br>work.</h2>
-          <p class="section-note">Two current projects built from the ground up. One focused on practical career workflows. One focused on visual product experience.</p>
+          <p class="section-note">Three projects spanning full-stack product engineering, local-first Generative AI, and creative web experiences.</p>
         </div>
 
         <article class="project reveal">
@@ -190,7 +196,40 @@
         <article class="project reveal">
           <div class="project-info">
             <div>
-              <div class="project-number">02 / CREATIVE WEB</div>
+              <div class="project-number">02 / GENERATIVE AI · RAG</div>
+              <h3>Knowledge<br>Assistant<span style="color:var(--acid)">.</span></h3>
+              <p>A local-first enterprise knowledge assistant that retrieves relevant passages from internal documents and generates answers with source citations. Includes a repeatable evaluation harness for retrieval, paraphrase handling and unanswerable questions.</p>
+              <div class="tags">
+                <span class="tag">PYTHON</span><span class="tag">RAG</span><span class="tag">OLLAMA</span>
+                <span class="tag">LLAMA 3.2:3B</span><span class="tag">CHROMADB</span><span class="tag">NOMIC EMBED</span><span class="tag">STREAMLIT</span>
+              </div>
+              <div class="tags" aria-label="Evaluation results">
+                <span class="tag">TOP-1 RETRIEVAL · 86%</span><span class="tag">TOP-3 RETRIEVAL · 100%</span>
+                <span class="tag">CITATION PROXY · 100%</span><span class="tag">REFUSAL · 90% (9/10)</span>
+              </div>
+              <p class="mono" style="font-size:11px;color:#686861">Benchmarked on 43 answerable questions, 10 paraphrases and 10 unanswerable questions. Automated proxy metrics; results are machine- and dataset-specific.</p>
+            </div>
+            <a class="project-link magnetic" href="https://github.com/pranavk3212/enterprise-rag-knowledge-assistant" target="_blank" rel="noopener">View on GitHub <i>↗</i></a>
+          </div>
+          <div class="project-art">
+            <div class="art-grid"></div>
+            <div class="art-rag">
+              <div class="rag-node rag-doc">DOCS<span>MD · TXT · PDF</span></div>
+              <div class="rag-line rag-line-one"></div>
+              <div class="rag-node rag-embed">EMBED<span>NOMIC</span></div>
+              <div class="rag-line rag-line-two"></div>
+              <div class="rag-node rag-store">VECTOR STORE<span>CHROMA DB</span></div>
+              <div class="rag-line rag-line-three"></div>
+              <div class="rag-node rag-model">LLM<span>LLAMA 3.2:3B</span></div>
+              <div class="rag-cite">RETRIEVE → GENERATE → CITE</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-info">
+            <div>
+              <div class="project-number">03 / CREATIVE WEB</div>
               <h3>NOIR<span style="color:var(--acid)">.</span></h3>
               <p>A futuristic minimalist fashion storefront with cinematic motion, smooth scrolling, product discovery, cart interactions and a restrained editorial visual system.</p>
               <div class="tags">
